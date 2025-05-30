@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- ============================================================= -->
+    <!-- =                                                           = -->
+    <!-- = [!] WARNING: Do NOT modify this file!                     = -->
+    <!-- =     It is not part of your submission.                    = -->
+    <!-- =     All submission code should go in the captcha folder.  = -->
+    <!-- =     The final game shell may not appear exactly like      = -->
+    <!-- =     this.                                                 = -->
+    <!-- =                                                           = -->
+    <!-- ============================================================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Checking connection...</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+      }
+
+      h1,
+      h2 {
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      #wrapper {
+        max-width: 800px;
+        margin: 60px auto;
+        padding: 0 40px;
+      }
+
+      #checkbox-label {
+        border: 1px solid #aaa;
+        padding: 20px 24px;
+        padding-right: 64px;
+        display: inline-flex;
+        gap: 24px;
+        border-radius: 6px;
+        align-items: center;
+      }
+
+      #checkbox {
+        width: 24px;
+        height: 24px;
+      }
+
+      #game-wrapper {
+        margin-top: 8px;
+        padding: 0 8px 4px 8px;
+        width: 390px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        border: 1px solid rgb(0 0 0 / 0.12);
+        border-radius: 6px;
+        position: relative;
+      }
+
+      #game-inner-wrapper {
+        border: 1px solid #aaa;
+        width: 390px;
+      }
+
+      #arrow {
+        position: absolute;
+        top: -6px;
+        left: 32px;
+        width: 12px;
+        height: 12px;
+        border-top: 1px solid rgb(0 0 0 / 0.12);
+        border-right: 1px solid rgb(0 0 0 / 0.12);
+        transform: rotate(-45deg);
+        background: white;
+      }
+
+      #checkmark {
+        width: 28px;
+        height: 28px;
+        font-size: 28px;
+        line-height: 1;
+        border-radius: 100%;
+      }
+
+      #dev-success-message {
+        width: 100%;
+        padding: 16px 0;
+        background-color: oklch(62.7% 0.194 149.214);
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        transition: opacity 0.2s ease-in-out;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .invisible {
+        opacity: 0;
+      }
+
+      /* Credit: https://loading.io/css/ */
+      .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        margin: 8px;
+        border: 4px solid #333;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #333 transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .lds-ring-2 {
+        display: inline-block;
+        position: relative;
+        width: 28px;
+        height: 28px;
+      }
+      .lds-ring-2 div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        margin: 8px;
+        border: 2px solid #333;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #333 transparent transparent transparent;
+      }
+      .lds-ring-2 div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring-2 div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring-2 div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+
+      @media (max-width: 500px) {
+        #wrapper {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        #game-wrapper {
+          margin-left: -9px;
+          margin-right: -9px;
+        }
+      }
+    </style>
+</head>
+<body>
+<div id="dev-success-message" class="invisible">
+    CAPTCHA completed! The page will reload in 1 second...
+</div>
+
+<!-- This code represents what the "game shell" may appear as, but is no guarantee of the final game container. -->
+<div id="wrapper">
+    <img src="data:image/png;base64,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" alt="">
+    <h1>kitboga.com</h1>
+    <h2>Checking if the site connection is secure</h2>
+    <div>
+        <div id="loader" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        <div id="checkbox-container" class="hidden">
+            <label id="checkbox-label">
+                <input type="checkbox" id="checkbox">
+                <div id="loader-checkbox" class="lds-ring-2 hidden"><div></div><div></div><div></div><div></div></div>
+                <div id="checkmark" class="hidden">&#9989;</div>
+                I am a human.
+            </label>
+        </div>
+        <div id="game-wrapper" class="hidden">
+            <div id="arrow"></div>
+            <p>
+                <strong>One more thing...</strong>
+                Additional verification is required. Please verify by solving the automated CAPTCHA below.
+            </p>
+            <div id="game-inner-wrapper">
+                <iframe id="game" src="about:blank" width="390" height="300" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+    <p style="margin-top: 48px;">kitboga.com needs to review each and every secure connection before proceeding.</p>
+</div>
+
+<script>
+  /*
+   * WARNING: Do NOT modify this code! It is not part of your submission!
+   */
+  (function (window, document) {
+    const loaderEl = document.getElementById('loader')
+    const loaderCheckboxEl = document.getElementById('loader-checkbox')
+    const checkboxContainerEl = document.getElementById('checkbox-container')
+    const checkboxEl = document.getElementById('checkbox')
+    const gameWrapperEl = document.getElementById('game-wrapper')
+    const gameEl = document.getElementById('game')
+    const checkmarkEl = document.getElementById('checkmark')
+    const devSuccessEl = document.getElementById('dev-success-message')
+
+    setTimeout(() => {
+      checkboxEl.checked = false
+      loaderEl.classList.add('hidden')
+      checkboxContainerEl.classList.remove('hidden')
+    }, 500)
+
+    checkboxEl.addEventListener('input', (e) => {
+      checkboxEl.classList.add('hidden')
+      loaderCheckboxEl.classList.remove('hidden')
+
+      setTimeout(() => {
+        gameWrapperEl.classList.remove('hidden')
+        gameEl.src = './captcha/captcha.html';
+        gameEl.contentWindow.focus()
+      }, 500)
+    })
+
+    window.addEventListener('message', (event) => {
+      if (event.data === 'success') {
+        checkmarkEl.classList.remove('hidden');
+        loaderCheckboxEl.classList.add('hidden');
+        devSuccessEl.classList.remove('invisible');
+        gameWrapperEl.classList.add('hidden');
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    })
+  })(window, document);
+</script>
+</body>
+</html>
