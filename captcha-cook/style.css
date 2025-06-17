@@ -25,6 +25,7 @@ html {
 }
 body {
   margin: 0;
+  font-family: "VT323", monospace;
 }
 details,
 main {
@@ -42,7 +43,8 @@ code,
 kbd,
 pre,
 samp {
-  font-family: monospace, monospace;
+  font-family: "VT323", monospace;
+
   font-size: 1em;
 }
 a {
@@ -145,13 +147,16 @@ template {
 
 /* Cooking Game Styles - Compact 390x300 Version */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
+  font-family: "VT323", monospace;
+
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   padding: 0;
   box-sizing: border-box;
   margin: 0;
+  font-size: 30px;
+  font-weight: 100;
+  text-transform: uppercase;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -161,7 +166,6 @@ body {
   width: 390px;
   height: 300px;
   background: white;
-  border-radius: 15px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   position: relative;
@@ -172,7 +176,6 @@ body {
   height: 100%;
   cursor: none;
   position: relative;
-  padding: 8px;
   box-sizing: border-box;
 }
 
@@ -201,25 +204,22 @@ body {
     url("./images/grille.png");
   background-size: 40px 40px, 30px 30px;
   background-repeat: repeat, repeat;
-  border-radius: 12px;
   position: relative;
   overflow: hidden;
-  border: 2px solid #dee2e6;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: none;
 }
 
 .game-area-inner {
   display: grid;
-  grid-template-rows: 110px 1fr;
+  grid-template-rows: 90px 1fr;
   height: 100%;
 }
 
 .preparation-area {
-  background: rgba(240, 240, 240, 0.7), url("./images/grille.png");
-  background-size: 25px 25px;
+  background: url("./images/grille.png");
+  background-size: auto 100%;
   background-repeat: repeat;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   pointer-events: none;
 }
 
@@ -264,7 +264,7 @@ body {
   width: 100%;
   height: 100%;
   background-image: url("./images/grille.png");
-  background-size: auto 30%;
+  background-size: auto 50%;
   background-position: top center;
   background-repeat: repeat;
   z-index: 2;
@@ -367,7 +367,7 @@ body {
   padding: 1px 2px;
   font-size: 0.5em;
   font-weight: bold;
-  font-family: monospace;
+
   border: 1px solid #333;
 }
 
@@ -378,7 +378,7 @@ body {
   padding: 1px 2px;
   font-size: 0.5em;
   font-weight: bold;
-  font-family: monospace;
+
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -430,6 +430,24 @@ body {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   z-index: 100;
   text-align: center;
+}
+
+.restart-button {
+  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+.restart-button:hover {
+  background: linear-gradient(145deg, #ff5252, #d84315);
+  transform: translateY(-1px);
 }
 
 .celebration {

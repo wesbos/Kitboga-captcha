@@ -34,6 +34,7 @@ class CookingGame {
     this.calculateFirePosition();
     this.startProximityChecking();
     this.createCustomCursor();
+    this.updateStatus('Grill the items to perfection', false);
   }
 
   private createGameHTML() {
@@ -66,13 +67,11 @@ class CookingGame {
       { name: 'Naan', icon: 'naan', cookTime: 3, tolerance: 0.5 }
     ];
 
-    // Position items in a 2x3 grid for compact layout
-    const itemWidth = 55; // Width including spacing
-    const itemHeight = 75; // Height including spacing
-    const startX = 15; // Left margin
+    // Position items in a single horizontal row across the top
+    const itemWidth = 60; // Width including spacing (reduced to fit 6 items)
+    const totalWidth = itemConfigs.length * itemWidth;
+    const startX = (374 - totalWidth) / 2; // Center the row (374 = 390 - 16px padding)
     const startY = 10; // Top margin
-    const cols = 3;
-    const rows = 2;
 
     itemConfigs.forEach((config, index) => {
       const itemElement = document.createElement('div');
@@ -90,10 +89,8 @@ class CookingGame {
         </div>
       `;
 
-      const col = index % cols;
-      const row = Math.floor(index / cols);
-      const x = startX + (col * itemWidth);
-      const y = startY + (row * itemHeight);
+      const x = startX + (index * itemWidth);
+      const y = startY;
 
       const item: CookingItem = {
         element: itemElement,
@@ -393,24 +390,71 @@ class CookingGame {
         this.celebrateWin();
       } else {
         // Failure
-        this.updateStatus('💀 FAILED! Too many items were burnt or ruined! Try again! 💀');
-        setTimeout(() => {
-          alert('Cooking Challenge Failed! Some items were burnt or ruined. Please try again.');
-        }, 1000);
+        this.handleFailure();
       }
     }
   }
 
-  private updateStatus(message: string) {
+  private updateStatus(message: string, autoClear: boolean = true) {
     const status = document.getElementById('status')!;
     status.textContent = message;
 
-    // Auto-clear status after 3 seconds
-    setTimeout(() => {
-      if (status.textContent === message) {
-        status.textContent = '';
+    // Only auto-clear if specified
+    if (autoClear) {
+      setTimeout(() => {
+        if (status.textContent === message) {
+          status.textContent = '';
+        }
+      }, 3000);
+    }
+  }
+
+  private handleFailure() {
+    this.updateStatus('💀 FAILED! Too many items were burnt or ruined!', false);
+
+    // Create restart button
+    const restartButton = document.createElement('button');
+    restartButton.textContent = 'Try Again';
+    restartButton.className = 'restart-button';
+    restartButton.addEventListener('click', () => this.restartGame());
+
+    // Add button to status area
+    const statusElement = document.getElementById('status')!;
+    statusElement.appendChild(document.createElement('br'));
+    statusElement.appendChild(restartButton);
+  }
+
+  private restartGame() {
+    // Reset all items
+    this.items.forEach(item => {
+      item.currentTime = 0;
+      item.isOnFire = false;
+      item.element.className = 'cooking-item';
+      item.element.style.setProperty('--cook-intensity', '0');
+
+      // Reset timer display
+      const timerText = item.element.querySelector('.current-time') as HTMLElement;
+      timerText.textContent = '0.0s';
+      timerText.style.color = '#4CAF50';
+
+      // Clear any timers
+      if (item.timer) {
+        clearInterval(item.timer);
+        item.timer = undefined;
       }
-    }, 3000);
+
+      // Reset position to original
+      this.positionItem(item, item.x, item.y);
+    });
+
+    // Reset game state
+    this.gameWon = false;
+
+    // Clear status and restart message
+    this.updateStatus('Grill the items to perfection', false);
+
+    // Remove celebration class if it exists
+    this.container.classList.remove('celebration');
   }
 
   private celebrateWin() {
@@ -421,7 +465,7 @@ class CookingGame {
 
     // Trigger captcha success
     setTimeout(() => {
-      (window as any).captchaSuccess?.();
+      window.top.postMessage("success", "*");
     }, 2000);
   }
 
