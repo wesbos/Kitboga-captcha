@@ -1,0 +1,511 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+button,
+hr,
+input {
+  overflow: visible;
+}
+progress,
+sub,
+sup {
+  vertical-align: baseline;
+}
+[type="checkbox"],
+[type="radio"],
+legend {
+  box-sizing: border-box;
+  padding: 0;
+}
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+details,
+main {
+  display: block;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+a {
+  background-color: transparent;
+}
+abbr[title] {
+  border-bottom: none;
+  text-decoration: underline;
+  text-decoration: underline dotted;
+}
+b,
+strong {
+  font-weight: bolder;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+img {
+  border-style: none;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+button,
+select {
+  text-transform: none;
+}
+[type="button"],
+[type="reset"],
+[type="submit"],
+button {
+  -webkit-appearance: button;
+}
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner,
+button::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring,
+button:-moz-focusring {
+  outline: ButtonText dotted 1px;
+}
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+legend {
+  color: inherit;
+  display: table;
+  max-width: 100%;
+  white-space: normal;
+}
+textarea {
+  overflow: auto;
+}
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+[type="search"] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+summary {
+  display: list-item;
+}
+[hidden],
+template {
+  display: none;
+}
+
+/* Cooking Game Styles - Compact 390x300 Version */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#captcha-container {
+  width: 390px;
+  height: 300px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.cooking-game {
+  width: 100%;
+  height: 100%;
+  cursor: none;
+  position: relative;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.cooking-game h2 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+.cooking-game > p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.1em;
+}
+
+.game-area {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      to bottom,
+      rgba(220, 220, 220, 0.8) 0%,
+      rgba(220, 220, 220, 0.8) 40%,
+      rgba(180, 180, 180, 0.9) 40%,
+      rgba(180, 180, 180, 0.9) 100%
+    ),
+    url("./images/grille.png");
+  background-size: 40px 40px, 30px 30px;
+  background-repeat: repeat, repeat;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #dee2e6;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: none;
+}
+
+.game-area-inner {
+  display: grid;
+  grid-template-rows: 110px 1fr;
+  height: 100%;
+}
+
+.preparation-area {
+  background: rgba(240, 240, 240, 0.7), url("./images/grille.png");
+  background-size: 25px 25px;
+  background-repeat: repeat;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+.fire {
+  width: 100%;
+  z-index: 5;
+  pointer-events: none;
+  background: orange;
+  position: relative;
+}
+
+.fire-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: fire-animation 2s infinite;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+@keyframes fire-animation {
+  0%,
+  49.99% {
+    background-image: url("./images/fire-1.png");
+  }
+  50%,
+  100% {
+    background-image: url("./images/fire-2.png");
+  }
+}
+
+.fire-grates {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./images/grille.png");
+  background-size: auto 30%;
+  background-position: top center;
+  background-repeat: repeat;
+  z-index: 2;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.cooking-item {
+  position: absolute;
+  background: transparent;
+  cursor: none;
+  user-select: none;
+  width: 50px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.cooking-item:hover {
+  transform: translateY(-1px) scale(1.05);
+  cursor: none;
+}
+
+.cooking-item.dragging {
+  opacity: 0.8;
+  transform: rotate(3deg) scale(1.1);
+  cursor: none;
+  z-index: 1000;
+}
+
+.cooking-item.cooking {
+  animation: cooking-pulse 1s ease-in-out infinite alternate;
+}
+
+.cooking-item.perfect {
+  animation: perfect-glow 1.5s ease-in-out;
+}
+
+@keyframes perfect-glow {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 5px rgba(40, 167, 69, 0.8));
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.cooking-item.decent {
+  opacity: 0.9;
+}
+
+.cooking-item.burnt {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.item-info {
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.item-times {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  align-items: center;
+}
+
+.target-time {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 2px;
+  padding: 1px 2px;
+  font-size: 0.5em;
+  font-weight: bold;
+  font-family: monospace;
+  border: 1px solid #333;
+}
+
+.current-time {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  border-radius: 2px;
+  padding: 1px 2px;
+  font-size: 0.5em;
+  font-weight: bold;
+  font-family: monospace;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth progressive cooking overlay */
+.asset::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 4px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  background: radial-gradient(
+    circle,
+    rgba(101, 67, 33, var(--cook-intensity, 0)) 0%,
+    rgba(62, 39, 20, var(--cook-intensity, 0)) 100%
+  );
+  opacity: var(--cook-intensity, 0);
+  mix-blend-mode: multiply;
+}
+
+.instructions {
+  background: #e3f2fd;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  border-left: 4px solid #2196f3;
+}
+
+.instructions p {
+  margin: 0;
+  color: #1565c0;
+}
+
+.status {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+  padding: 4px 6px;
+  font-weight: bold;
+  font-size: 0.7em;
+  color: #333;
+  min-height: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  text-align: center;
+}
+
+.celebration {
+  animation: celebrate 2s ease-in-out;
+}
+
+@keyframes celebrate {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.02) rotate(0.5deg);
+  }
+  50% {
+    transform: scale(1.05) rotate(-0.5deg);
+  }
+  75% {
+    transform: scale(1.02) rotate(0.25deg);
+  }
+}
+
+/* Assets - Individual Images for Easy Scaling */
+.asset {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 40px;
+  height: 48px;
+  position: relative;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.asset.steak {
+  background-image: url("./images/steak-single.png");
+}
+.asset.chicken {
+  background-image: url("./images/chicken-single.png");
+}
+.asset.egg {
+  background-image: url("./images/egg-single.png");
+}
+.asset.potato {
+  background-image: url("./images/potato-single.png");
+}
+.asset.naan {
+  background-image: url("./images/naan.png");
+}
+.asset.sausage {
+  background-image: url("./images/sausage.png");
+}
+
+@keyframes cooking-pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
+/* Custom cursor - smaller for compact view */
+.custom-cursor {
+  position: fixed;
+  width: 25px;
+  height: 60px;
+  background-image: url("./images/spatula-cursor.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 5;
+  transform: translate(-12px, -8px);
+  transition: none;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
