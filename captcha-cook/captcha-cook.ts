@@ -108,29 +108,29 @@ class CookingGame {
       this.gameArea.appendChild(itemElement);
       this.positionItem(item, x, y);
 
-      // Add mouse event listeners for dragging
-      itemElement.addEventListener('mousedown', (e) => this.handleMouseDown(e, item));
+      // Add pointer event listeners for dragging
+      itemElement.addEventListener('pointerdown', (e) => this.handlePointerDown(e, item));
     });
   }
 
   private setupEventListeners() {
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    document.addEventListener('pointermove', this.handlePointerMove.bind(this));
+    document.addEventListener('pointerup', this.handlePointerUp.bind(this));
 
     // Recalculate fire position if window is resized
     window.addEventListener('resize', () => {
       this.calculateFirePosition();
     });
 
-    // Show/hide custom cursor in game area
-    this.container.addEventListener('mouseenter', () => {
-      if (this.customCursor) {
+    // Show/hide custom cursor in game area (only on non-touch devices)
+    this.container.addEventListener('pointerenter', (e) => {
+      if (this.customCursor && e.pointerType !== 'touch') {
         this.customCursor.style.display = 'block';
       }
     });
 
-    this.container.addEventListener('mouseleave', () => {
-      if (this.customCursor) {
+    this.container.addEventListener('pointerleave', (e) => {
+      if (this.customCursor && e.pointerType !== 'touch') {
         this.customCursor.style.display = 'none';
       }
     });
@@ -227,8 +227,14 @@ class CookingGame {
     }
   }
 
-  private handleMouseDown(e: MouseEvent, item: CookingItem) {
+  private handlePointerDown(e: PointerEvent, item: CookingItem) {
     e.preventDefault();
+
+    // Prevent scrolling on touch devices while dragging
+    if (e.pointerType === 'touch') {
+      document.body.style.touchAction = 'none';
+    }
+
     this.draggedItem = item;
 
     const itemRect = item.element.getBoundingClientRect();
@@ -239,11 +245,14 @@ class CookingGame {
 
     item.element.classList.add('dragging');
     item.element.style.zIndex = '1000';
+
+    // Set pointer capture for better mobile support
+    item.element.setPointerCapture(e.pointerId);
   }
 
-  private handleMouseMove(e: MouseEvent) {
-    // Update custom cursor position
-    if (this.customCursor) {
+  private handlePointerMove(e: PointerEvent) {
+    // Update custom cursor position (only for mouse, not touch)
+    if (this.customCursor && e.pointerType !== 'touch') {
       this.customCursor.style.left = `${e.clientX}px`;
       this.customCursor.style.top = `${e.clientY}px`;
     }
@@ -260,8 +269,13 @@ class CookingGame {
     this.positionItem(this.draggedItem, newX, newY);
   }
 
-  private handleMouseUp(e: MouseEvent) {
+  private handlePointerUp(e: PointerEvent) {
     if (!this.draggedItem) return;
+
+    // Restore scrolling on touch devices
+    if (e.pointerType === 'touch') {
+      document.body.style.touchAction = 'auto';
+    }
 
     this.draggedItem.element.classList.remove('dragging');
     this.draggedItem.element.style.zIndex = '10';
