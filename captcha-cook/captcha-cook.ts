@@ -16,6 +16,8 @@ class CookingGame {
   private fireElement: HTMLElement;
   private items: CookingItem[] = [];
   private gameWon = false;
+  private gameFailed = false;
+  private gameStarted = false;
   private draggedItem: CookingItem | null = null;
   private dragOffset = { x: 0, y: 0 };
   private proximityCheckTimer?: number; // Timer for continuous proximity checking
@@ -32,9 +34,8 @@ class CookingGame {
     this.createCookingItems();
     this.setupEventListeners();
     this.calculateFirePosition();
-    this.startProximityChecking();
     this.createCustomCursor();
-    this.updateStatus('Grill the items to perfection', false);
+    this.showStartButton();
   }
 
   private createGameHTML() {
@@ -149,6 +150,11 @@ class CookingGame {
   }
 
   private startProximityChecking() {
+    // Clear any existing timer first
+    if (this.proximityCheckTimer) {
+      clearInterval(this.proximityCheckTimer);
+    }
+
     // Check proximity for all items every 300ms (reduced frequency to prevent flickering)
     this.proximityCheckTimer = window.setInterval(() => {
       this.items.forEach(item => {
@@ -174,6 +180,9 @@ class CookingGame {
   }
 
   private checkFireProximity(item: CookingItem) {
+    // Don't check proximity if game hasn't started or has failed
+    if (!this.gameStarted || this.gameFailed) return;
+
     // Recalculate fire position each time to ensure accuracy
     this.calculateFirePosition();
 
@@ -260,10 +269,20 @@ class CookingGame {
   }
 
   private startCooking(item: CookingItem) {
-    if (item.isOnFire) return;
+    // Don't start cooking if game hasn't started or has failed
+    if (!this.gameStarted || this.gameFailed || item.isOnFire) return;
 
     item.isOnFire = true;
     item.element.classList.add('cooking');
+
+    // Play sizzle sound when item hits the grill
+    const sizzleSound = document.getElementById('sizzle-sound') as HTMLAudioElement;
+    if (sizzleSound) {
+      sizzleSound.currentTime = 0; // Reset to start for multiple plays
+      sizzleSound.play().catch(error => {
+        console.log('Could not play sizzle sound:', error);
+      });
+    }
 
     // Start timer - this will run continuously every 100ms
     item.timer = window.setInterval(() => {
@@ -281,6 +300,42 @@ class CookingGame {
     item.isOnFire = false;
     item.element.classList.remove('cooking');
 
+    // Check cooking status to determine which sound to play
+    const progress = item.currentTime / item.cookTime;
+    const timeDiff = Math.abs(item.currentTime - item.cookTime);
+    const isPerfectOrDecent = timeDiff <= item.tolerance * 2;
+    const isUndercooked = item.currentTime < item.cookTime;
+
+    // Play appropriate sound based on cooking state (check tolerance first!)
+    if (isPerfectOrDecent && !isUndercooked) {
+      // Play beautiful sound for properly cooked food (within tolerance, not undercooked)
+      const beautifulSound = document.getElementById('beautiful-sound') as HTMLAudioElement;
+      if (beautifulSound) {
+        beautifulSound.currentTime = 0;
+        beautifulSound.play().catch(error => {
+          console.log('Could not play beautiful sound:', error);
+        });
+      }
+    } else if (isUndercooked) {
+      // Play order-up sound for undercooked food
+      const orderUpSound = document.getElementById('order-up-sound') as HTMLAudioElement;
+      if (orderUpSound) {
+        orderUpSound.currentTime = 0;
+        orderUpSound.play().catch(error => {
+          console.log('Could not play order-up sound:', error);
+        });
+      }
+    } else {
+      // Play burned sound for overcooked food (outside tolerance)
+      const burnedSound = document.getElementById('burned-sound') as HTMLAudioElement;
+      if (burnedSound) {
+        burnedSound.currentTime = 0;
+        burnedSound.play().catch(error => {
+          console.log('Could not play burned sound:', error);
+        });
+      }
+    }
+
     // Clear timer
     if (item.timer) {
       clearInterval(item.timer);
@@ -288,7 +343,6 @@ class CookingGame {
     }
 
     // Keep the final cooking intensity visual effect
-    const progress = item.currentTime / item.cookTime;
     const cookIntensity = Math.max(0, Math.min(1, (progress - 0.2) / 1.3));
 
     // Preserve the cooking visual state
@@ -327,12 +381,25 @@ class CookingGame {
     if (progress > 1.5) {
       // Burnt!
       item.element.classList.add('burnt');
+
+      // Play burned sound when food gets burnt
+      const burnedSound = document.getElementById('burned-sound') as HTMLAudioElement;
+      if (burnedSound) {
+        burnedSound.currentTime = 0; // Reset to start for multiple plays
+        burnedSound.play().catch(error => {
+          console.log('Could not play burned sound:', error);
+        });
+      }
+
       this.stopCooking(item);
       this.updateStatus(`Oh no! ${item.name} is burnt! 🔥💀`);
     }
   }
 
   private checkWinCondition(item: CookingItem) {
+    // Don't check win condition if game has already failed
+    if (this.gameFailed) return;
+
     const timeDiff = Math.abs(item.currentTime - item.cookTime);
     const isPerfect = timeDiff <= item.tolerance;
     const isDecent = timeDiff <= item.tolerance * 2;
@@ -340,6 +407,12 @@ class CookingGame {
 
     if (isPerfect) {
       item.element.classList.add('perfect');
+
+      // Replace current time with green checkmark
+      const timerText = item.element.querySelector('.current-time') as HTMLElement;
+      timerText.textContent = '✓';
+      timerText.classList.add('perfect');
+
       this.updateStatus(`Perfect! ${item.name} cooked to perfection! ✨`);
     } else if (isBurnt) {
       item.element.classList.add('burnt');
@@ -396,13 +469,16 @@ class CookingGame {
   }
 
   private updateStatus(message: string, autoClear: boolean = true) {
+    // Don't update status if game has failed (to preserve restart button)
+    if (this.gameFailed) return;
+
     const status = document.getElementById('status')!;
     status.textContent = message;
 
     // Only auto-clear if specified
     if (autoClear) {
       setTimeout(() => {
-        if (status.textContent === message) {
+        if (status.textContent === message && !this.gameFailed) {
           status.textContent = '';
         }
       }, 3000);
@@ -410,6 +486,24 @@ class CookingGame {
   }
 
   private handleFailure() {
+    this.gameFailed = true;
+
+    // Stop all cooking timers
+    this.items.forEach(item => {
+      if (item.timer) {
+        clearInterval(item.timer);
+        item.timer = undefined;
+      }
+      item.isOnFire = false;
+      item.element.classList.remove('cooking');
+    });
+
+    // Stop proximity checking
+    if (this.proximityCheckTimer) {
+      clearInterval(this.proximityCheckTimer);
+      this.proximityCheckTimer = undefined;
+    }
+
     this.updateStatus('💀 FAILED! Too many items were burnt or ruined!', false);
 
     // Create restart button
@@ -425,6 +519,11 @@ class CookingGame {
   }
 
   private restartGame() {
+    // Reset game state
+    this.gameWon = false;
+    this.gameFailed = false;
+    this.gameStarted = false;
+
     // Reset all items
     this.items.forEach(item => {
       item.currentTime = 0;
@@ -435,23 +534,25 @@ class CookingGame {
       // Reset timer display
       const timerText = item.element.querySelector('.current-time') as HTMLElement;
       timerText.textContent = '0.0s';
-      timerText.style.color = '#4CAF50';
-
-      // Clear any timers
-      if (item.timer) {
-        clearInterval(item.timer);
-        item.timer = undefined;
-      }
+      timerText.style.color = '#333';
+      timerText.classList.remove('perfect');
 
       // Reset position to original
       this.positionItem(item, item.x, item.y);
     });
 
-    // Reset game state
-    this.gameWon = false;
+    // Clear status area completely (including restart button)
+    const statusElement = document.getElementById('status')!;
+    statusElement.innerHTML = '';
 
-    // Clear status and restart message
-    this.updateStatus('Grill the items to perfection', false);
+    // Stop proximity checking
+    if (this.proximityCheckTimer) {
+      clearInterval(this.proximityCheckTimer);
+      this.proximityCheckTimer = undefined;
+    }
+
+    // Show start button again
+    this.showStartButton();
 
     // Remove celebration class if it exists
     this.container.classList.remove('celebration');
@@ -459,6 +560,15 @@ class CookingGame {
 
   private celebrateWin() {
     this.updateStatus('🎉 CONGRATULATIONS! You\'ve mastered the cooking challenge! 🎉');
+
+    // Play beautiful sound for successful completion
+    const beautifulSound = document.getElementById('beautiful-sound') as HTMLAudioElement;
+    if (beautifulSound) {
+      beautifulSound.currentTime = 0;
+      beautifulSound.play().catch(error => {
+        console.log('Could not play beautiful sound:', error);
+      });
+    }
 
     // Add celebration animation
     this.container.classList.add('celebration');
@@ -474,6 +584,45 @@ class CookingGame {
     this.customCursor.className = 'custom-cursor';
     this.customCursor.style.display = 'none';
     document.body.appendChild(this.customCursor);
+  }
+
+  private showStartButton() {
+    const statusElement = document.getElementById('status')!;
+    statusElement.innerHTML = '';
+
+    // Create start instruction
+    const instruction = document.createElement('div');
+    instruction.textContent = 'Grill the items to perfection!';
+
+    // Create start button
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start Cooking';
+    startButton.className = 'start-button';
+    startButton.addEventListener('click', () => this.startGame());
+
+    statusElement.appendChild(instruction);
+    statusElement.appendChild(startButton);
+  }
+
+  private startGame() {
+    this.gameStarted = true;
+
+    // Clear the status area
+    const statusElement = document.getElementById('status')!;
+    statusElement.innerHTML = '';
+
+    // Play background music
+    const bgMusic = document.getElementById('bg-music') as HTMLAudioElement;
+    if (bgMusic) {
+      bgMusic.volume = 0.4;
+      bgMusic.play().catch(error => {
+        console.log('Could not play background music:', error);
+      });
+    }
+
+    // Start the game
+    this.startProximityChecking();
+    this.updateStatus('Grill the items to perfection', false);
   }
 }
 

@@ -377,8 +377,14 @@ body {
   padding: 1px 2px;
   font-size: 0.5em;
   font-weight: bold;
-
   border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.current-time.perfect {
+  background: #28a745;
+  color: white;
+  border: 1px solid #1e7e34;
 }
 
 .instructions {
@@ -426,6 +432,24 @@ body {
 
 .restart-button:hover {
   background: linear-gradient(145deg, #ff5252, #d84315);
+  transform: translateY(-1px);
+}
+
+.start-button {
+  background: linear-gradient(145deg, #4caf50, #388e3c);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+.start-button:hover {
+  background: linear-gradient(145deg, #66bb6a, #2e7d32);
   transform: translateY(-1px);
 }
 
