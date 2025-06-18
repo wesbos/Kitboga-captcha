@@ -148,7 +148,6 @@ template {
 /* Cooking Game Styles - Compact 390x300 Version */
 body {
   font-family: "VT323", monospace;
-
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   padding: 0;
@@ -382,26 +381,6 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-/* Smooth progressive cooking overlay */
-.asset::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 4px;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  background: radial-gradient(
-    circle,
-    rgba(101, 67, 33, var(--cook-intensity, 0)) 0%,
-    rgba(62, 39, 20, var(--cook-intensity, 0)) 100%
-  );
-  opacity: var(--cook-intensity, 0);
-  mix-blend-mode: multiply;
-}
-
 .instructions {
   background: #e3f2fd;
   border-radius: 15px;
@@ -481,25 +460,45 @@ body {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
+  background-image: var(--background-image);
 }
 
 .asset.steak {
-  background-image: url("./images/steak-single.png");
+  --background-image: url("./images/steak-single.png");
 }
 .asset.chicken {
-  background-image: url("./images/chicken-single.png");
+  --background-image: url("./images/chicken-single.png");
 }
 .asset.egg {
-  background-image: url("./images/egg-single.png");
+  --background-image: url("./images/egg-single.png");
 }
 .asset.potato {
-  background-image: url("./images/potato-single.png");
+  --background-image: url("./images/potato-single.png");
 }
 .asset.naan {
-  background-image: url("./images/naan.png");
+  --background-image: url("./images/naan.png");
 }
 .asset.sausage {
-  background-image: url("./images/sausage.png");
+  --background-image: url("./images/sausage.png");
+}
+
+/* Smooth progressive cooking overlay */
+.asset::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 4px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  opacity: var(--cook-intensity, 0);
+  mix-blend-mode: multiply;
+  mask-image: var(--background-image);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 
 @keyframes cooking-pulse {
