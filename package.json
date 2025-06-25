@@ -1,0 +1,27 @@
+{
+  "name": "kitboga-captcha",
+  "version": "0.0.1",
+  "description": "\"I'm not a robot!\"",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "dev": "vite serve captcha-cook",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesbos/Kitboga-captcha.git"
+  },
+  "keywords": [],
+  "author": "Wes Bos (https://wesbos.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wesbos/Kitboga-captcha/issues"
+  },
+  "homepage": "https://github.com/wesbos/Kitboga-captcha#readme",
+  "type": "module",
+  "dependencies": {
+    "vite": "^7.0.0"
+  }
+}

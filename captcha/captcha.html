@@ -1,52 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Joel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wes Bos Kitboga Captcha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/captcha-IAC9Wd_a.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/captcha-BBhPvRY6.css">
+  </head>
 
-  <style type="text/css">
-    html,
-    body {
-      background: pink;
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-    }
+  <body>
+    <div id="captcha-container"></div>
+    <audio src="./assets/bg-CV9nCAmp.mp3" loop id="bg-music"></audio>
+    <audio src="./assets/sizzle-BXRoC2w8.mp3" id="sizzle-sound"></audio>
+    <audio src="./assets/order-up-fD1GqSWY.mp3" id="order-up-sound"></audio>
+    <audio src="./assets/you-burned-it-CZEA1ZZ0.mp3" id="burned-sound"></audio>
+    <audio src="./assets/beautiful--TdjeruV.mp3" id="beautiful-sound"></audio>
 
-    #captcha-container {
-      background: white;
-      width: 390px;
-      height: 300px;
-    }
+    <script type="text/javascript">
+      (function (window, document) {
+        // This is how you tell the parent window that the CAPTCHA was successful.
+        function captchaSuccess() {
+          window.top.postMessage("success", "*");
+        }
 
-    /* Your style here... */
-  </style>
-</head>
-
-<body>
-  <div id="captcha-container">
-    <!-- Add your CAPTCHA here: -->
-    Hello world!
-
-    <!-- We've added a sample button. Feel free to remove it: -->
-    <button id="solve">
-      Solve!
-    </button>
-  </div>
-
-  <script type="text/javascript">
-    (function(window, document){
-      // This is how you tell the parent window that the CAPTCHA was successful.
-      function captchaSuccess() {
-        window.top.postMessage("success", '*');
-      }
-
-      // Your CAPTCHA code goes here, we've added a simple example below:
-      document.getElementById('solve')
-           .addEventListener('click', () => captchaSuccess());
-
-    })(window, document);
-  </script>
-</body>
+        // Make captchaSuccess available globally for the game
+        window.captchaSuccess = captchaSuccess;
+      })(window, document);
+    </script>
+  </body>
 </html>

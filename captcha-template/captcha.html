@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Joel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style type="text/css">
+    html,
+    body {
+      background: pink;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    #captcha-container {
+      background: white;
+      width: 390px;
+      height: 300px;
+    }
+
+    /* Your style here... */
+  </style>
+</head>
+
+<body>
+  <div id="captcha-container">
+    <!-- Add your CAPTCHA here: -->
+    Hello world!
+
+    <!-- We've added a sample button. Feel free to remove it: -->
+    <button id="solve">
+      Solve!
+    </button>
+  </div>
+
+  <script type="text/javascript">
+    (function(window, document){
+      // This is how you tell the parent window that the CAPTCHA was successful.
+      function captchaSuccess() {
+        window.top.postMessage("success", '*');
+      }
+
+      // Your CAPTCHA code goes here, we've added a simple example below:
+      document.getElementById('solve')
+           .addEventListener('click', () => captchaSuccess());
+
+    })(window, document);
+  </script>
+</body>
+</html>
