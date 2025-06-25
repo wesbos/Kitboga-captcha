@@ -60,8 +60,8 @@ class CookingGame {
     this.fireElement = document.getElementById('fire')!;
 
     const itemConfigs = [
-      { name: 'Steak', icon: 'steak', cookTime: 8, tolerance: 1 },
-      { name: 'Egg', icon: 'egg', cookTime: 4, tolerance: 0.5 },
+      { name: 'Steak', icon: 'steak', cookTime: 15, tolerance: 0.2 },
+      { name: 'Egg', icon: 'egg', cookTime: 2, tolerance: 0.3 },
       { name: 'Chicken', icon: 'chicken', cookTime: 6, tolerance: 1 },
       { name: 'Potato', icon: 'potato', cookTime: 5, tolerance: 0.8 },
       { name: 'Sausage', icon: 'sausage', cookTime: 7, tolerance: 1 },
