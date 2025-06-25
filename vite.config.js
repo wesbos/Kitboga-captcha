@@ -6,6 +6,7 @@ export default defineConfig({
   build: {
     outDir: '../captcha',
     emptyOutDir: true,
+    minify: false,
     rollupOptions: {
       input: {
         captcha: resolve(__dirname, 'captcha-cook/captcha.html')
