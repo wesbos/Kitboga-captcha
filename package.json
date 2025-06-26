@@ -1,13 +1,11 @@
 {
   "name": "kitboga-captcha",
   "version": "0.0.1",
-  "description": "\"I'm not a robot!\"",
+  "description": "\"Wes Bos' Kitboga Code Jam Submission\"",
   "main": "index.js",
   "scripts": {
     "build": "vite build",
-    "preview": "vite preview",
-    "dev": "vite serve captcha-cook",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite ."
   },
   "repository": {
     "type": "git",

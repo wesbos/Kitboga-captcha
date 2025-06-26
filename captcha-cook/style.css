@@ -253,11 +253,11 @@ body {
 @keyframes fire-animation {
   0%,
   49.99% {
-    background-image: url("./images/fire-1.png");
+    background-image: url("./images/fire-1.jpg");
   }
   50%,
   100% {
-    background-image: url("./images/fire-2.png");
+    background-image: url("./images/fire-2.jpg");
   }
 }
 
